@@ -5,32 +5,25 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
-@Entity
-@Table(name = "todos", schema = "todo", catalog = "")
+@Embeddable
 public class Todo {
-    @Basic
-    @Column(name = "mensId")
-    private Object mensId;
-    @Basic
-    @Column(name = "tekst")
     private String tekst;
-    @Basic
-    @Column(name = "prioriteit")
+
     private int prioriteit;
-    @Basic
-    @Column(name = "gemaakt")
+
     private Timestamp gemaakt;
-    @ManyToOne
-    @JoinColumn(name = "mensId", referencedColumnName = "id", nullable = false)
-    private Mens mensenByMensId;
 
-    public Object getMensId() {
-        return mensId;
+
+    public Todo(String tekst, int prioriteit) {
+        this.tekst = tekst;
+        this.prioriteit = prioriteit;
+        this.gemaakt = new Timestamp(System.currentTimeMillis());
     }
 
-    public void setMensId(Object mensId) {
-        this.mensId = mensId;
+    protected Todo() {
+
     }
+
 
     public String getTekst() {
         return tekst;
@@ -61,19 +54,14 @@ public class Todo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Todo todo = (Todo) o;
-        return prioriteit == todo.prioriteit && Objects.equals(mensId, todo.mensId) && Objects.equals(tekst, todo.tekst) && Objects.equals(gemaakt, todo.gemaakt);
+        return prioriteit == todo.prioriteit && Objects.equals(tekst, todo.tekst) && Objects.equals(gemaakt, todo.gemaakt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mensId, tekst, prioriteit, gemaakt);
+        return Objects.hash(tekst, prioriteit, gemaakt);
     }
 
-    public Mens getMensenByMensId() {
-        return mensenByMensId;
-    }
 
-    public void setMensenByMensId(Mens mensenByMensId) {
-        this.mensenByMensId = mensenByMensId;
-    }
+
 }

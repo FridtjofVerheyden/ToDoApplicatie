@@ -1,2 +1,6 @@
-package be.vdab.todoapplicatie;public interface MensRepository {
+package be.vdab.todoapplicatie;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MensRepository extends JpaRepository<Mens, Long> {
 }

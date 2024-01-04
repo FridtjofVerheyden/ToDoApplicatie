@@ -3,29 +3,38 @@ package be.vdab.todoapplicatie;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "mensen", schema = "todo", catalog = "")
+@Table(name = "mensen", schema = "todo")
 public class Mens {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
-    private Object id;
+    private long id;
     @Basic
     @Column(name = "voornaam")
     private String voornaam;
     @Basic
     @Column(name = "familienaam")
     private String familienaam;
-    @OneToMany(mappedBy = "mensenByMensId")
-    private Collection<Todo> todosById;
+    @ElementCollection
+    @CollectionTable(name = "todos", joinColumns = @JoinColumn(name = "mensId"))
+    private Collection<Todo> todos;
 
-    public Object getId() {
+    public Mens(String voornaam, String familienaam) {
+        this.voornaam = voornaam;
+        this.familienaam = familienaam;
+    }
+    protected Mens() {
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -58,11 +67,11 @@ public class Mens {
         return Objects.hash(id, voornaam, familienaam);
     }
 
-    public Collection<Todo> getTodosById() {
-        return todosById;
+    public Collection<Todo> getTodos() {
+        return todos;
     }
 
-    public void setTodosById(Collection<Todo> todosById) {
-        this.todosById = todosById;
+    public void addTodo(Todo todo) {
+        todos.add(todo);
     }
 }
